@@ -40,6 +40,7 @@
                     autoplay: false,
                     muted: false,    // 静音
                     language: 'zh-CN',
+                    aspectRatio: '16:9',
                     playbackRates: [0.5, 1.0, 1.5, 2.0],
                     sources: [{
                         type: "video/mp4",

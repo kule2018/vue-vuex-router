@@ -12,6 +12,11 @@ const About = (resolve => {
         resolve(require('./views/About.vue'))
     })
 })
+const FormDemo = (resolve => {
+    require.ensure(['./views/FormDemo.vue'], () => {
+        resolve(require('./views/FormDemo.vue'))
+    })
+})
 
 Vue.use(Router)
 
@@ -29,7 +34,12 @@ export default new Router({
             path: '/about',
             name: 'about',
             component: About,
-        }
+        },
+        {
+            path: '/form',
+            name: 'form',
+            component: FormDemo,
+        },
     ],
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
