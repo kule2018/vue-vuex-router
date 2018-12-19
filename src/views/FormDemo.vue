@@ -1,34 +1,180 @@
 <template>
-    <cube-form :model="model" @validate="validateHandler" :options="options" @submit="submitHandler">
-        <cube-form-item :field="fields[0]"></cube-form-item>
-        <cube-button type="submit">Submit</cube-button>
-    </cube-form>
+    <div>
+        <cube-form
+            :model="model"
+            :schema="schema"
+            :immediate-validate="false"
+            :options="options"
+            @validate="validateHandler"
+            @submit="submitHandler"
+            @reset="resetHandler"></cube-form>
+    </div>
 </template>
 
 <script type="text/ecmascript-6">
     export default {
         data() {
             return {
-                model: {
-                    inputValue: ''
-                },
+                validity: {},
                 valid: undefined,
-                fields: [
-                    {
-                        type: 'input',
-                        modelKey: 'inputValue',
-                        label: 'Input',
-                        props: {
-                            placeholder: '请输入'
+                model: {
+                    checkboxValue: false,
+                    checkboxGroupValue: [],
+                    inputValue: '',
+                    radioValue: '',
+                    rateValue: 0,
+                    selectValue: 2018,
+                    switchValue: true,
+                    textareaValue: '',
+                    uploadValue: []
+                },
+                schema: {
+                    groups: [
+                        {
+                            legend: '基础',
+                            fields: [
+                                {
+                                    type: 'checkbox',
+                                    modelKey: 'checkboxValue',
+                                    label: 'Checkbox',
+                                    props: {
+                                        option: {
+                                            label: 'Checkbox',
+                                            value: true
+                                        }
+                                    },
+                                    rules: {
+                                        required: true
+                                    },
+                                    messages: {
+                                        required: 'Please check this field'
+                                    }
+                                },
+                                {
+                                    type: 'checkbox-group',
+                                    modelKey: 'checkboxGroupValue',
+                                    label: 'CheckboxGroup',
+                                    props: {
+                                        options: ['1', '2', '3']
+                                    },
+                                    rules: {
+                                        required: true
+                                    }
+                                },
+                                {
+                                    type: 'input',
+                                    modelKey: 'inputValue',
+                                    label: 'Input',
+                                    props: {
+                                        placeholder: '请输入'
+                                    },
+                                    rules: {
+                                        required: true
+                                    },
+                                    // validating when blur
+                                    trigger: 'blur'
+                                },
+                                {
+                                    type: 'radio-group',
+                                    modelKey: 'radioValue',
+                                    label: 'Radio',
+                                    props: {
+                                        options: ['1', '2', '3']
+                                    },
+                                    rules: {
+                                        required: true
+                                    }
+                                },
+                                {
+                                    type: 'select',
+                                    modelKey: 'selectValue',
+                                    label: 'Select',
+                                    props: {
+                                        options: [2015, 2016, 2017, 2018, 2019, 2020]
+                                    },
+                                    rules: {
+                                        required: true
+                                    }
+                                },
+                                {
+                                    type: 'switch',
+                                    modelKey: 'switchValue',
+                                    label: 'Switch',
+                                    rules: {
+                                        required: true
+                                    }
+                                },
+                                {
+                                    type: 'textarea',
+                                    modelKey: 'textareaValue',
+                                    label: 'Textarea',
+                                    rules: {
+                                        required: true
+                                    },
+                                    // debounce validate
+                                    // if set to true, the default debounce time will be 200(ms)
+                                    debounce: 100
+                                }
+                            ]
                         },
-                        rules: {
-                            required: true
+                        {
+                            legend: '高级',
+                            fields: [
+                                {
+                                    type: 'rate',
+                                    modelKey: 'rateValue',
+                                    label: 'Rate',
+                                    rules: {
+                                        required: true
+                                    }
+                                },
+                                {
+                                    type: 'upload',
+                                    modelKey: 'uploadValue',
+                                    label: 'Upload',
+                                    rules: {
+                                        required: true,
+                                        uploaded: (val, config) => {
+                                            return Promise.all(val.map((file, i) => {
+                                                return new Promise((resolve, reject) => {
+                                                    if (file.uploadedUrl) {
+                                                        return resolve()
+                                                    }
+                                                    // fake request
+                                                    setTimeout(() => {
+                                                        if (i % 2) {
+                                                            reject(new Error())
+                                                        } else {
+                                                            file.uploadedUrl = 'uploaded/url'
+                                                            resolve()
+                                                        }
+                                                    }, 1000)
+                                                })
+                                            })).then(() => {
+                                                return true
+                                            })
+                                        }
+                                    },
+                                    messages: {
+                                        uploaded: '上传失败'
+                                    }
+                                }
+                            ]
                         },
-                        messages: {
-                            required: 'Please check this field'
+                        {
+                            fields: [
+                                {
+                                    type: 'submit',
+                                    label: 'Submit'
+                                },
+                                {
+                                    type: 'reset',
+                                    label: 'Reset'
+                                }
+                            ]
                         }
-                    },
-                ],
+                    ]
+                },
                 options: {
                     scrollToInvalidField: true,
                     layout: 'classic' // standard fresh
@@ -36,14 +182,18 @@
             }
         },
         methods: {
-            submitHandler() {
-
+            submitHandler(e) {
+                e.preventDefault()
+                console.log('submit', e)
             },
             validateHandler(result) {
                 this.validity = result.validity
                 this.valid = result.valid
-                // console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
+                console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
             },
+            resetHandler(e) {
+                console.log('reset', e)
+            }
         }
     }
 </script>
