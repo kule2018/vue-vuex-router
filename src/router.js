@@ -22,6 +22,11 @@ const AudioDemo = (resolve => {
         resolve(require('./views/AudioDemo.vue'))
     })
 })
+const Xgplayer = (resolve => {
+    require.ensure(['./views/Xgplayer.vue'], () => {
+        resolve(require('./views/Xgplayer.vue'))
+    })
+})
 
 Vue.use(Router)
 
@@ -49,6 +54,11 @@ export default new Router({
             path: '/audio',
             name: 'audio',
             component: AudioDemo,
+        },
+        {
+            path: '/xgplayer',
+            name: 'xgplayer',
+            component: Xgplayer,
         },
     ],
     scrollBehavior(to, from, savedPosition) {
