@@ -17,6 +17,11 @@ const FormDemo = (resolve => {
         resolve(require('./views/FormDemo.vue'))
     })
 })
+const AudioDemo = (resolve => {
+    require.ensure(['./views/AudioDemo.vue'], () => {
+        resolve(require('./views/AudioDemo.vue'))
+    })
+})
 
 Vue.use(Router)
 
@@ -39,6 +44,11 @@ export default new Router({
             path: '/form',
             name: 'form',
             component: FormDemo,
+        },
+        {
+            path: '/audio',
+            name: 'audio',
+            component: AudioDemo,
         },
     ],
     scrollBehavior(to, from, savedPosition) {
