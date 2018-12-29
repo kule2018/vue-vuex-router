@@ -5,6 +5,7 @@ import {sessionSetItem} from '../common/util'
 // 按需（懒）加载
 const Home = () => import( /* webpackChunkName: "home" */ '../views/home.vue')
 const My = () => import( /* webpackChunkName: "home" */ '../views/my.vue')
+const BetterScroll = () => import( /* webpackChunkName: "home" */ '../views/betterScroll.vue')
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ const router = new Router({
             path: '/my',
             name: 'my',
             component: My
+        },
+        {
+            path: '/scroll',
+            name: 'betterScroll',
+            component: BetterScroll
         },
         {
             path: '*',

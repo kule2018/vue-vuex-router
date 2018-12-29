@@ -33,9 +33,13 @@
 
 <style lang="scss" scoped>
 	.layout-container {
-		height: 100vh;
+        display: flex;
+        flex-flow: column;
+        height: 100vh;
 		.content-container {
-			height: calc(100vh - 60px);
+            display: flex;
+            flex-flow: column;
+            flex: 1;
 			overflow-x: hidden;
 			overflow-y: scroll;
 		}
